@@ -1,0 +1,9 @@
+{
+  "TopicConfigurations": [
+    {
+      "Id": "ImageUploadNotification",
+      "TopicArn": "arn:aws:sns:us-east-1:784055307907:APIStack-uploadedimagetopic9EF836CA-RXwvL4JNf5W0",
+      "Events": ["s3:ObjectCreated:Put"]
+    }
+  ]
+}

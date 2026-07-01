@@ -1,0 +1,45 @@
+{
+  "_comment": "Execution role for IntegrationLambda / send_email (IntegrationStack). Triggered by SQS, reads SSM parameter for 3rd-party endpoint, converts rekognition results to XML and POSTs them. CDK creates this role automatically — this file is a reference and fallback.",
+  "_trust_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": { "Service": "lambda.amazonaws.com" },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudWatchLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:eu-central-1:015337708931:log-group:/aws/lambda/*:*"
+    },
+    {
+      "Sid": "AllowSQSTrigger",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:ChangeMessageVisibility"
+      ],
+      "Resource": "arn:aws:sqs:eu-central-1:015337708931:*"
+    },
+    {
+      "Sid": "AllowSSMGetParameter",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:GetParameter"
+      ],
+      "Resource": "arn:aws:ssm:eu-central-1:015337708931:parameter/thirdparty_endpoint"
+    }
+  ]
+}

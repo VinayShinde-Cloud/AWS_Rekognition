@@ -1,0 +1,51 @@
+{
+  "_comment": "Policy attached to the QuickSight service role (aws-quicksight-service-role-v0). CDK attaches both this custom policy AND the AWS-managed AWSQuicksightAthenaAccess policy to the role. Both are required. CDK does this automatically via quicksight_athena_policy.attach_to_role() and ManagedPolicy.from_aws_managed_policy_name('service-role/AWSQuicksightAthenaAccess').attach_to_role().",
+  "_managed_policy_also_required": "arn:aws:iam::aws:policy/service-role/AWSQuicksightAthenaAccess",
+  "_how_to_attach_manually": "aws iam attach-role-policy --role-name aws-quicksight-service-role-v0 --policy-arn arn:aws:iam::aws:policy/service-role/AWSQuicksightAthenaAccess",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowAthenaWorkgroupAccess",
+      "Effect": "Allow",
+      "Action": [
+        "athena:GetWorkGroup",
+        "athena:StartQueryExecution",
+        "athena:StopQueryExecution",
+        "athena:GetQueryExecution",
+        "athena:GetQueryResults",
+        "athena:ListQueryExecutions",
+        "athena:BatchGetQueryExecution"
+      ],
+      "Resource": "arn:aws:athena:eu-central-1:015337708931:workgroup/dynamodb-visualization"
+    },
+    {
+      "Sid": "AllowAthenaResultsBucketAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:AbortMultipartUpload",
+        "s3:ListBucket",
+        "s3:GetBucketLocation"
+      ],
+      "Resource": [
+        "arn:aws:s3:::*athena*results*",
+        "arn:aws:s3:::*athena*results*/*"
+      ]
+    },
+    {
+      "Sid": "AllowGlueReadForAthena",
+      "Effect": "Allow",
+      "Action": [
+        "glue:GetDatabase",
+        "glue:GetDatabases",
+        "glue:GetTable",
+        "glue:GetTables",
+        "glue:GetPartition",
+        "glue:GetPartitions",
+        "glue:BatchGetPartition"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

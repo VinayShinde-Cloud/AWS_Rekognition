@@ -1,0 +1,129 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AthenaPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "athena:CreateWorkGroup",
+        "athena:DeleteWorkGroup",
+        "athena:GetWorkGroup",
+        "athena:UpdateWorkGroup",
+        "athena:ListWorkGroups",
+        "athena:StartQueryExecution",
+        "athena:StopQueryExecution",
+        "athena:GetQueryExecution",
+        "athena:GetQueryResults",
+        "athena:ListQueryExecutions",
+        "athena:BatchGetQueryExecution",
+        "athena:CreateDataCatalog",
+        "athena:DeleteDataCatalog",
+        "athena:GetDataCatalog",
+        "athena:UpdateDataCatalog",
+        "athena:ListDataCatalogs",
+        "athena:TagResource",
+        "athena:UntagResource",
+        "athena:ListTagsForResource"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "GluePermissions",
+      "Effect": "Allow",
+      "Action": [
+        "glue:CreateDatabase",
+        "glue:DeleteDatabase",
+        "glue:GetDatabase",
+        "glue:GetDatabases",
+        "glue:UpdateDatabase",
+        "glue:CreateTable",
+        "glue:DeleteTable",
+        "glue:GetTable",
+        "glue:GetTables",
+        "glue:UpdateTable",
+        "glue:BatchDeleteTable",
+        "glue:GetPartition",
+        "glue:GetPartitions",
+        "glue:CreatePartition",
+        "glue:BatchCreatePartition",
+        "glue:DeletePartition",
+        "glue:BatchDeletePartition",
+        "glue:CreateCrawler",
+        "glue:DeleteCrawler",
+        "glue:GetCrawler",
+        "glue:GetCrawlers",
+        "glue:UpdateCrawler",
+        "glue:StartCrawler",
+        "glue:StopCrawler",
+        "glue:GetCrawlerMetrics",
+        "glue:TagResource",
+        "glue:UntagResource",
+        "glue:ListCrawlers"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "QuickSightPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "quicksight:CreateDataSource",
+        "quicksight:DeleteDataSource",
+        "quicksight:DescribeDataSource",
+        "quicksight:DescribeDataSourcePermissions",
+        "quicksight:UpdateDataSource",
+        "quicksight:UpdateDataSourcePermissions",
+        "quicksight:PassDataSource",
+        "quicksight:CreateDataSet",
+        "quicksight:DeleteDataSet",
+        "quicksight:DescribeDataSet",
+        "quicksight:UpdateDataSet",
+        "quicksight:ListDataSources",
+        "quicksight:ListDataSets",
+        "quicksight:DescribeAccountSubscription",
+        "quicksight:ListUsers",
+        "quicksight:DescribeUser",
+        "quicksight:RegisterUser"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "ServerlessRepoPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "serverlessrepo:GetApplication",
+        "serverlessrepo:CreateCloudFormationTemplate",
+        "serverlessrepo:GetCloudFormationTemplate",
+        "serverlessrepo:CreateCloudFormationChangeSet",
+        "serverlessrepo:ListApplicationVersions",
+        "serverlessrepo:ListApplicationDependencies",
+        "serverlessrepo:SearchApplications",
+        "serverlessrepo:ListApplications"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchPermissions",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:DeleteLogGroup",
+        "logs:DescribeLogGroups",
+        "logs:PutRetentionPolicy",
+        "logs:DeleteRetentionPolicy",
+        "logs:TagLogGroup",
+        "logs:UntagLogGroup",
+        "logs:CreateLogDelivery",
+        "logs:DeleteLogDelivery",
+        "logs:DescribeResourcePolicies",
+        "logs:PutResourcePolicy",
+        "logs:DeleteResourcePolicy",
+        "cloudwatch:PutMetricAlarm",
+        "cloudwatch:DeleteAlarms",
+        "cloudwatch:DescribeAlarms",
+        "cloudwatch:TagResource",
+        "cloudwatch:UntagResource"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

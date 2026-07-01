@@ -1,0 +1,20 @@
+{
+  "_comment": "Execution role for the Athena DynamoDB Connector Lambda (VisualizationStack). Deployed via SAR (AthenaDynamoDBConnector). These 4 managed policies are all required — the SAR connector's Java SDK makes S3, DynamoDB, Athena, and Glue calls that need broader access than inline policies alone provide. CDK creates this role automatically — this file is a reference and fallback.",
+  "_trust_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": { "Service": "lambda.amazonaws.com" },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "_managed_policies_to_attach": [
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+    "arn:aws:iam::aws:policy/AmazonS3FullAccess",
+    "arn:aws:iam::aws:policy/service-role/AWSQuicksightAthenaAccess"
+  ],
+  "_note": "The inline policy statements below are kept for reference but the managed policies above are what actually resolved the bucket ownership and DynamoDB access errors. Attach all 4 managed policies to this role."
+}

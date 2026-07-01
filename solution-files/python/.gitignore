@@ -1,0 +1,43 @@
+# CDK
+cdk.out
+*.d.ts
+*.js
+!jest.config.js
+*.d.ts.map
+
+# Python
+.venv/
+.env
+.env.local
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# AWS
+cdk-outputs-*.json
+.aws/
+aws_credentials.json
+credentials.json
+
+# Environment
+.env*
+!.env.example
+
+# OS
+.DS_Store
+.gitkeep
+
+# Temporary
+*.tmp
+*.log
+*.pid

@@ -1,0 +1,34 @@
+{
+  "_comment": "Execution role for SaveXMLLambda (IntegrationStack). Receives XML via API Gateway POST and saves it to S3. CDK creates this role automatically — this file is a reference and fallback.",
+  "_trust_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": { "Service": "lambda.amazonaws.com" },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudWatchLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:eu-central-1:015337708931:log-group:/aws/lambda/SaveXMLLambda:*"
+    },
+    {
+      "Sid": "AllowS3PutXML",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::*/*"
+    }
+  ]
+}

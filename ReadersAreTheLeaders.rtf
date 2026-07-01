@@ -1,0 +1,124 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2870
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Italic;\f2\fnil\fcharset0 Menlo-Regular;
+\f3\fnil\fcharset0 .SFNS-Regular_wdth_opsz110000_GRAD_wght1F40000;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red251\green0\blue7;\red37\green156\blue83;
+\red16\green16\blue16;\red34\green255\blue6;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c1\c1;\cssrgb\c100000\c12195\c0;\cssrgb\c15686\c66275\c40000;
+\cssrgb\c7451\c7451\c7451;\cssrgb\c0\c100000\c0;\cssrgb\c0\c1\c1;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww37320\viewh19620\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs48 \cf2 \expnd0\expndtw0\kerning0
+\
+ \cf3 Make Sure To Read The README.md\cf2 \
+\
+
+\f1\i\b0 \
+ Choose Your environment \
+ Kiro IDE on your Workstation\
+\
+ \'97\'97\'97\'97 Or In the Cloud 
+\f2\i0 _______________________________________________________________
+\f1\i \
+\
+ kiro-cli login --use-device-flow\
+
+\f2\i0 \
+ Use with Google Kiro 
+\f3\fs30 Device authorized\cf4 \cb5 \
+\
+
+\f2\fs48 \cf2 \cb1  
+\f1\i kiro-cli --classic
+\f2\i0 \
+
+\f1\i \
+ 
+\f2\i0 _____________________________________________________________________________________
+\f1\i \
+\
+
+\f2\i0  \cf6 Open the new terminal, run:
+\f0\b \cf2 \
+ \
+
+\f2\b0  
+\f0\b \cf7 \ul \ulc7 Runtime Code Environment
+\f2\b0 \cf2 \ulnone \
+
+\f0\b  \
+ 
+\f2\b0 Upload the code\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2  
+\f1\i unzip solution-files.zip\
+\
+ cd solution-files/python/\
+ python3 -m venv .venv\
+ source .venv/bin/activate\
+\
+ pip install -r requirements.txt\
+\
+ pip install --upgrade pip\
+\pard\pardeftab720\partightenfactor0
+
+\f0\i0\b\fs72 \cf2 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\i\b0\fs48 \cf2  aws configure\
+\pard\pardeftab720\partightenfactor0
+
+\f0\i0\b\fs72 \cf2 \
+ ./deploy.sh\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b0\fs48 \cf2 Run a SmokeTest by 
+\f0\b ./deploy.sh \'97-diff\
+\pard\pardeftab720\partightenfactor0
+
+\f1\i\b0 \cf2  \
+ \
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\i0 \cf2 ______________________________________________________________________________________
+\f1\i \
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+\
+\
+  
+\f0\i0\b \cf7 \ul \ulc7 Stub Code Environment 
+\fs72 \cf2 \ulnone \
+
+\f1\i\b0\fs48 \
+ npm install -g aws-cdk \
+ \
+ cdk bootstrap aws://015331108937/eu-central-1\
+ \
+ cdk deploy APIStack\
+\
+ cdk deploy IntegrationStack\
+\
+ cdk deploy RekognitionStack\
+\
+ cdk deploy VisualizationStack\
+\
+\
+
+\f2\i0  cdk bootstrap --qualifier cloudage --toolkit-stack-name CDKToolkit\
+\
+ remove the custom qualifier from\'a0cdk.json\'a0to use the default bootstrap\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 ______________________________________________________________________________________\
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+
+\f0\b\fs72 \
+\
+}

@@ -1,0 +1,38 @@
+{
+  "_comment": "Execution role for ListImagesLambda (RekognitionStack). Scans and reads the Classifications DynamoDB table and returns results via API Gateway. CDK creates this role automatically — this file is a reference and fallback.",
+  "_trust_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": { "Service": "lambda.amazonaws.com" },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudWatchLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:eu-central-1:015337708931:log-group:/aws/lambda/ListImagesLambda:*"
+    },
+    {
+      "Sid": "AllowDynamoDBScanAndRead",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:Scan",
+        "dynamodb:GetItem",
+        "dynamodb:Query",
+        "dynamodb:BatchGetItem",
+        "dynamodb:DescribeTable"
+      ],
+      "Resource": "arn:aws:dynamodb:eu-central-1:015337708931:table/*"
+    }
+  ]
+}

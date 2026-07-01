@@ -1,0 +1,57 @@
+{
+  "_comment": "Execution role for the Glue DynamoDB Crawler (VisualizationStack). Crawls the Classifications DynamoDB table and writes the inferred schema to the Glue Data Catalog. CDK creates this role automatically — this file is a reference and fallback.",
+  "_trust_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": { "Service": "glue.amazonaws.com" },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AWSGlueServiceRoleInline",
+      "Effect": "Allow",
+      "Action": [
+        "glue:*",
+        "s3:GetBucketLocation",
+        "s3:ListBucket",
+        "s3:ListAllMyBuckets",
+        "s3:GetBucketAcl",
+        "ec2:DescribeVpcEndpoints",
+        "ec2:DescribeRouteTables",
+        "ec2:CreateNetworkInterface",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeVpcAttribute",
+        "iam:ListRolePolicies",
+        "iam:GetRole",
+        "iam:GetRolePolicy",
+        "cloudwatch:PutMetricData",
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:AssociateKmsKey"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowDynamoDBReadAll",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:ListTables",
+        "dynamodb:DescribeTable",
+        "dynamodb:Scan",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:BatchGetItem"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

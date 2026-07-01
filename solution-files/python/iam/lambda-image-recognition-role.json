@@ -1,0 +1,69 @@
+{
+  "_comment": "Execution role for image_recognition Lambda (RekognitionStack). Triggered by SQS, reads images from S3, calls Rekognition DetectLabels, writes results to DynamoDB, publishes to SNS. CDK creates this role automatically — this file is a reference and fallback.",
+  "_trust_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": { "Service": "lambda.amazonaws.com" },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  },
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowCloudWatchLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:eu-central-1:015337708931:log-group:/aws/lambda/*:*"
+    },
+    {
+      "Sid": "AllowSQSTrigger",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:ChangeMessageVisibility"
+      ],
+      "Resource": "arn:aws:sqs:eu-central-1:015337708931:*"
+    },
+    {
+      "Sid": "AllowRekognitionDetectLabels",
+      "Effect": "Allow",
+      "Action": [
+        "rekognition:DetectLabels"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowDynamoDBWrite",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:PutItem"
+      ],
+      "Resource": "arn:aws:dynamodb:eu-central-1:015337708931:table/*"
+    },
+    {
+      "Sid": "AllowSNSPublish",
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": "arn:aws:sns:eu-central-1:015337708931:*"
+    },
+    {
+      "Sid": "AllowS3GetObject",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::sagemaker-eu-central-1-015337708931/*"
+    }
+  ]
+}
