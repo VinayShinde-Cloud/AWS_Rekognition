@@ -70,140 +70,102 @@ This system automatically classifies images, stores results in DynamoDB, forward
 ## 📁 Project Structure
 
 ```
-AWS_ReKognition_AI_IDE_AWS_KIRO/
-├── Concepts/                                    # Architecture & Design
-│   ├── Recognition.drawio.png                  # Main architecture diagram
-│   ├── ML_OpsAWSRekognition-with-Kiro.png     # ML Ops workflow
-│   ├── VibeCoding.png                          # Development methodology
-│   ├── SDLC-AiSDLC-AiDLC-CCSSD.png            # Development lifecycle
-│   ├── TraditionalSoftwareDevelopmentCycle.png # SDLC overview
-│   └── CoreDevVsDevOps.png                     # Dev vs DevOps
-│
-├── Examples/                                    # Sample Data & Reports
-│   ├── athena.csv                              # Sample Athena results
-│   ├── Speed_&_Lane_Analysis_*.pdf            # Traffic analysis reports
-│   └── Traffic_Overview_*.pdf                 # Traffic visualization
-│
-├── Policies/                                    # AWS IAM Policies
-│   ├── qs_users.json                          # QuickSight user policy
-│   ├── s3_notification.json                   # S3 notification policy
-│   ├── s3_result.json                         # S3 result bucket policy
-│   ├── s3_verify.json                         # S3 verify bucket policy
-│   ├── sns_attrs.json                         # SNS attributes policy
-│   └── sns_policy.json                        # SNS publication policy
-│
-├── QuickSightFixes/                           # QuickSight Setup Guides
-│   ├── QUICKSIGHT_IMPORT_GUIDE.md
-│   ├── QUICKSIGHT_PERMISSION_FIX.md
-│   ├── QUICKSIGHT_SETUP.md
-│   ├── QUICKSIGHT_ROLES_ACCESS.md
-│   └── QUICKSIGHT_READY.md
-│
-├── solution-files/
-│   ├── README.md                               # 📖 Documentation
-│   ├── cdk-outputs-*.json                      # Stack outputs (auto-generated)
-│   ├── DEPLOYMENT_COMPLETE.md
-│   ├── DEPLOYMENT_SETUP_COMPLETE.md
+AWS-Rekognition/
+├── AWS_ReKognition_AI_IDE_AWS_KIRO/
+│   ├── Concepts/                              # Architecture diagrams & concepts
+│   │   ├── Recognition.drawio.png             # Main architecture diagram
+│   │   ├── VibeCoding.png                     # Development methodology
+│   │   └── ...
 │   │
-│   └── python/                                 # Python CDK Implementation
-│       ├── app.py                              # CDK app entry point
-│       ├── cdk.json                            # CDK context configuration
-│       ├── deploy.sh                           # Bash deployment script
-│       ├── deploy-simple.ps1                  # PowerShell deployment script
-│       ├── requirements.txt                    # Python dependencies
-│       ├── requirements-dev.txt                # Dev dependencies
-│       ├── scan_classifications.py             # DynamoDB scan/seed utility
-│       ├── send_images.py                      # Image upload utility
-│       ├── cdk-outputs-APIStack.json          # APIStack outputs
-│       ├── cdk-outputs-IntegrationStack.json  # IntegrationStack outputs
-│       ├── cdk-outputs-RekognitionStack.json  # RekognitionStack outputs
-│       ├── cdk-outputs-VisualizationStack.json # VisualizationStack outputs
+│   ├── Examples/                              # Sample data and reports
+│   │   ├── athena.csv                         # Sample Athena results
+│   │   └── Traffic_Overview_*.pdf             # Traffic analysis reports
+│   │
+│   └── solution-files/
+│       ├── README.md                          # 📖 Detailed documentation (START HERE)
 │       │
-│       ├── api/                                # APIStack - Image Ingestion
-│       │   ├── __init__.py
-│       │   ├── infrastructure.py               # Stack CDK definition
-│       │   └── runtime/
-│       │       ├── get_save_image.py           # Lambda: Download & upload
-│       │       ├── get_save_image_solution.py  # Reference implementation
-│       │       └── __pycache__/
-│       │
-│       ├── recognition/                        # RekognitionStack - Classification
-│       │   ├── __init__.py
-│       │   ├── infrastructure.py               # Stack CDK definition
-│       │   └── runtime/
-│       │       ├── image_recognition.py        # Lambda: Rekognition API call
-│       │       ├── image_recognition_solution.py
-│       │       ├── list_images.py              # Lambda: List classifications
-│       │       ├── list_images_solution.py
-│       │       └── __pycache__/
-│       │
-│       ├── integration/                        # IntegrationStack - Forwarding
-│       │   ├── __init__.py
-│       │   ├── infrastructure.py               # Stack CDK definition
-│       │   └── runtime/
-│       │       ├── send_email.py               # Lambda: XML conversion
-│       │       ├── send_email_solution.py
-│       │       ├── SaveXMLLambda.py            # Lambda: Save XML payload
-│       │       ├── SaveXMLLambda_solution.py
-│       │       └── __pycache__/
-│       │
-│       ├── visualization/                      # VisualizationStack - Analytics
-│       │   ├── __init__.py
-│       │   ├── infrastructure.py               # Stack CDK definition (no runtime)
-│       │   └── __pycache__/
-│       │
-│       ├── iam/                                # IAM Policies & Roles
-│       │   ├── deployer-user-policy.json      # Aggregate deployer policy
-│       │   ├── deployer-policy-1-infra.json   # Infrastructure permissions
-│       │   ├── deployer-policy-2-compute.json # Compute permissions
-│       │   ├── deployer-policy-3-analytics.json # Analytics permissions
-│       │   ├── fix-cdk-bootstrap-trust.sh     # Bootstrap trust fixer
-│       │   ├── lambda-image-get-save-role.json
-│       │   ├── lambda-image-recognition-role.json
-│       │   ├── lambda-integration-role.json
-│       │   ├── lambda-list-images-role.json
-│       │   ├── lambda-save-xml-role.json
-│       │   ├── lambda-athena-connector-role.json
-│       │   └── glue-crawler-role.json
-│       │
-│       ├── cdk.out/                            # CDK synthesized templates
-│       │   └── .cache/
-│       │
-│       └── .venv/                              # Python virtual environment
-│           ├── bin/                            # Linux/Mac executables
-│           ├── Scripts/                        # Windows executables
-│           └── lib/                            # Site packages
+│       └── python/                            # Python CDK Implementation
+│           ├── app.py                         # CDK app entry point
+│           ├── cdk.json                       # Configuration
+│           ├── deploy.sh                      # 🚀 Bash deployment automation
+│           ├── deploy-simple.ps1              # 🚀 PowerShell deployment automation
+│           ├── requirements.txt               # Python dependencies
+│           ├── scan_classifications.py        # DynamoDB utility
+│           │
+│           ├── api/                           # APIStack - Image ingestion
+│           │   ├── infrastructure.py
+│           │   └── runtime/
+│           │       ├── get_save_image.py
+│           │       └── get_save_image_solution.py
+│           │
+│           ├── recognition/                   # RekognitionStack - AI classification
+│           │   ├── infrastructure.py
+│           │   └── runtime/
+│           │       ├── image_recognition.py
+│           │       ├── image_recognition_solution.py
+│           │       ├── list_images.py
+│           │       └── list_images_solution.py
+│           │
+│           ├── integration/                   # IntegrationStack - Data forwarding
+│           │   ├── infrastructure.py
+│           │   └── runtime/
+│           │       ├── send_email.py
+│           │       ├── send_email_solution.py
+│           │       ├── SaveXMLLambda.py
+│           │       └── SaveXMLLambda_solution.py
+│           │
+│           ├── visualization/                 # VisualizationStack - Analytics
+│           │   └── infrastructure.py
+│           │
+│           └── iam/                           # IAM policies and roles
+│               ├── deployer-user-policy.json
+│               ├── deployer-policy-1-infra.json
+│               ├── deployer-policy-2-compute.json
+│               ├── deployer-policy-3-analytics.json
+│               └── fix-cdk-bootstrap-trust.sh
 │
-├── .kiro/                                      # Kiro IDE Configuration
-│   └── steering/                               # AI Development Guidance
-│       ├── tech.md                             # Tech stack details
-│       ├── structure.md                        # Project organization
-│       └── product.md                          # Product overview
+├── Concepts/                                  # Architecture diagrams (project root)
+│   ├── Recognition.drawio.png
+│   └── ...
 │
-├── .git/                                       # Git repository
+├── Examples/                                  # Sample data (project root)
+│   └── ...
 │
-├── .gitignore                                  # Git ignore rules
-├── CLEANUP_AND_TEARDOWN_GUIDE.md              # Cleanup instructions
-├── DEPLOYMENT_COMPLETE.md
-├── DEPLOYMENT_SETUP_COMPLETE.md
-├── MANUAL_DEPLOYMENT_GUIDE.md                 # Manual deployment steps
-└── ReadersAreTheLeaders.rtf                   # Project guidelines
+├── Policies/                                  # AWS IAM Policies
+│   ├── qs_users.json
+│   ├── s3_notification.json
+│   └── ...
+│
+└── QuickSightFixes/                          # QuickSight setup guides
+    ├── QUICKSIGHT_SETUP.md
+    └── ...
 ```
 
-### Key Directories Explained
+### 📊 Core Stack Modules
 
-| Directory | Purpose | Contains |
-|-----------|---------|----------|
-| `api/` | Image ingestion stack | API Gateway config, Lambda downloader |
-| `recognition/` | AI classification stack | Rekognition Lambda, DynamoDB config |
-| `integration/` | Data forwarding stack | XML converter, HTTP forwarder |
-| `visualization/` | Analytics stack | Athena, Glue, QuickSight config |
-| `iam/` | Security policies | IAM roles and permissions |
-| `Concepts/` | Architecture diagrams | Visual documentation |
-| `Examples/` | Sample data | Test data and report examples |
-| `Policies/` | AWS policies | IAM policy documents |
-| `QuickSightFixes/` | Setup guides | QuickSight configuration guides |
-| `.kiro/` | Kiro IDE config | Development guidance and rules |
+**APIStack** (`api/`)
+- REST API endpoint for image uploads
+- Lambda function (30s timeout) - downloads and stores images
+- S3 bucket for images
+- SNS/SQS event pipeline
+
+**RekognitionStack** (`recognition/`)
+- Rekognition API integration (max 10 labels, 70% confidence)
+- Lambda processor (300s timeout)
+- DynamoDB Classifications table
+- SQS event source mapping
+
+**IntegrationStack** (`integration/`)
+- XML conversion Lambda (300s timeout)
+- HTTP forwarding to downstream endpoint
+- SaveXMLLambda API endpoint
+- S3 XML storage bucket
+
+**VisualizationStack** (`visualization/`)
+- Athena DynamoDB connector (SAR)
+- Glue crawler for schema discovery
+- Athena workgroup for federated queries
+- QuickSight data source integration
 
 ## 🚀 Quick Start
 
