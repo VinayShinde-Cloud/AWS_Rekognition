@@ -106,8 +106,7 @@ Asset Bucket: rekognition-915916
 Free to use for learning and experimentation.
 
 ## Author
-
-**Ajit Jadhav**  
+ 
 Repository: [github.com/VinayShinde-Cloud/AWS_Rekognition](https://github.com/VinayShinde-Cloud/AWS_Rekognition)
 
 ---
