@@ -10,11 +10,9 @@ Automatically classify images, store results in DynamoDB, forward to downstream 
 
 ## Architecture
 
-```
-Upload → APIStack → Rekognition → DynamoDB
-  ↓         ↓           ↓
- S3      SNS/SQS    Integration → XML → QuickSight
-```
+## Architecture Diagram
+
+![AWS Rekognition Architecture](https://raw.githubusercontent.com/VinayShinde-Cloud/AWS_Rekognition/main/Concepts/Recognition.drawio.png)
 
 ## Quick Start
 
