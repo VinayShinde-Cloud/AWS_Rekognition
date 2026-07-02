@@ -16,14 +16,47 @@ This system automatically classifies images, stores results in DynamoDB, forward
 
 ## 🏗️ Architecture
 
+![Cloudage Architecture Diagram](https://raw.githubusercontent.com/VinayShinde-Cloud/AWS_Rekognition/main/Concepts/Recognition.drawio.png)
+
+**Architecture Flow:**
+
 ```
-Image Upload → APIStack → Rekognition → DynamoDB
-                ↓          ↓
-              S3         SNS/SQS
-                           ↓
-                     IntegrationStack → XML → S3
-                           ↓
-                    VisualizationStack → QuickSight
+┌─────────────────────────────────────────────────────────────────┐
+│                         AWS Cloud                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  ┌──────────────────┐                                            │
+│  │   API Stack      │                                            │
+│  │ • API Gateway    │                                            │
+│  │ • Lambda (30s)   │                                            │
+│  │ • S3 Bucket      │                                            │
+│  │ • SNS/SQS        │                                            │
+│  └────────┬─────────┘                                            │
+│           │                                                      │
+│  ┌────────▼──────────────────┐                                  │
+│  │ Rekognition Stack         │                                  │
+│  │ • Rekognition API         │                                  │
+│  │ • Lambda (300s)           │                                  │
+│  │ • DynamoDB                │                                  │
+│  │ • SQS/SNS                 │                                  │
+│  └────────┬──────────────────┘                                  │
+│           │                                                      │
+│  ┌────────▼──────────────────┐                                  │
+│  │ Integration Stack         │                                  │
+│  │ • XML Conversion          │                                  │
+│  │ • Lambda (300s)           │                                  │
+│  │ • HTTP Forwarding         │                                  │
+│  │ • S3 XML Storage          │                                  │
+│  └────────┬──────────────────┘                                  │
+│           │                                                      │
+│  ┌────────▼──────────────────┐                                  │
+│  │ Visualization Stack       │                                  │
+│  │ • Athena                  │                                  │
+│  │ • Glue Crawler            │                                  │
+│  │ • QuickSight              │                                  │
+│  └───────────────────────────┘                                  │
+│                                                                   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## ✨ Features
