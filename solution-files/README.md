@@ -1,4 +1,4 @@
-# AWS Rekognition Image Processing Pipeline
+# Cloudage Image Rekognition
 
 A production-ready, serverless image processing pipeline built with AWS CDK, Python, and Amazon Rekognition. This system automatically classifies images, stores results in DynamoDB, forwards data to downstream systems, and provides rich analytics through Amazon QuickSight.
 
@@ -68,20 +68,37 @@ AWS-Rekognition/
 ├── Concepts/                                    # Architecture diagrams
 │   ├── Recognition.drawio.png                  # Main architecture
 │   ├── VibeCoding.png                          # Development flow
-│   └── ML_OpsAWSRekognition-with-Kiro.png     # ML Ops overview
+│   ├── ML_OpsAWSRekognition-with-Kiro.png     # ML Ops overview
+│   └── SDLC-AiSDLC-AiDLC-CCSSD.png            # Development lifecycle
 │
 ├── Examples/                                    # Sample data & reports
-│   ├── athena.csv
-│   └── Traffic_Overview_*.pdf
+│   ├── athena.csv                              # Sample Athena results
+│   ├── Speed_&_Lane_Analysis_*.pdf            # Traffic analysis reports
+│   └── Traffic_Overview_*.pdf                 # Traffic overview reports
+│
+├── Policies/                                    # AWS IAM Policies
+│   ├── qs_users.json                          # QuickSight user policy
+│   ├── s3_notification.json                   # S3 notification policy
+│   ├── s3_result.json                         # S3 result bucket policy
+│   ├── s3_verify.json                         # S3 verify bucket policy
+│   ├── sns_attrs.json                         # SNS attributes policy
+│   └── sns_policy.json                        # SNS policy
+│
+├── QuickSightFixes/                           # QuickSight setup guides
+│   ├── QUICKSIGHT_IMPORT_GUIDE.md
+│   ├── QUICKSIGHT_PERMISSION_FIX.md
+│   └── QUICKSIGHT_SETUP.md
 │
 ├── solution-files/
 │   ├── README.md                               # 📖 START HERE
 │   └── python/                                 # Python CDK Implementation
 │       ├── app.py                              # CDK entry point
 │       ├── cdk.json                            # Configuration
-│       ├── deploy.sh                           # 🚀 Deployment script
+│       ├── deploy.sh                           # 🚀 Bash deployment script
+│       ├── deploy-simple.ps1                  # 🚀 PowerShell deployment script
 │       ├── requirements.txt                    # Dependencies
 │       ├── scan_classifications.py             # DynamoDB utility
+│       ├── send_images.py                     # Image upload utility
 │       │
 │       ├── api/                                # APIStack
 │       │   ├── infrastructure.py
@@ -143,14 +160,32 @@ python3 -m venv .venv
 # Activate virtual environment
 # On Linux/Mac:
 source .venv/bin/activate
-# On Windows:
-.venv\Scripts\activate
+# On Windows (PowerShell):
+.venv\Scripts\Activate.ps1
 
 # Install dependencies
 pip install -r requirements.txt
+```
 
+### Deployment (Bash)
+
+```bash
 # Deploy all stacks
 ./deploy.sh --region us-east-1
+
+# Deploy single stack
+./deploy.sh --stack APIStack --region us-east-1
+```
+
+### Deployment (Windows PowerShell)
+
+```powershell
+# Deploy all stacks
+.\deploy-simple.ps1
+
+# Set AWS region (default: us-east-1)
+$env:AWS_REGION = "us-east-1"
+.\deploy-simple.ps1
 ```
 
 ### Testing
@@ -190,36 +225,103 @@ For detailed documentation, see:
 | **Config** | SSM Parameter Store |
 | **Monitoring** | CloudWatch |
 
+## 🔧 AWS Account Configuration
+
+**Account Details:**
+- **AWS Account ID:** `784055307907`
+- **IAM User:** `Vinay-AI`
+- **Default Region:** `us-east-1`
+- **Asset Bucket:** `rekognition-915916`
+- **Athena Results Bucket:** `athena-results-784055307907`
+- **Image Bucket Prefix:** `sagemaker`
+- **QuickSight User:** `Vinay-AI`
+
+**Important:** Update `cdk.json` context keys if using a different AWS account:
+
+```json
+{
+  "context": {
+    "asset_bucket": "your-asset-bucket",
+    "image_bucket_prefix": "your-prefix",
+    "quicksight_user": "your-quicksight-user"
+  }
+}
+```
+
 ## 📊 What Gets Deployed
 
 The CDK app deploys 4 interconnected stacks:
 
-### 1. **APIStack** - Image Ingestion
-- REST API Gateway endpoint
-- ImageGetSaveLambda function
-- S3 image bucket
-- SNS topic for events
-- SQS upload queue with DLQ
+### 1. **APIStack** - Image Ingestion & Upload
+**Purpose:** REST API endpoint for image uploads with event-driven S3 integration
 
-### 2. **RekognitionStack** - AI Classification
-- image_recognition Lambda
-- ListImages Lambda
-- DynamoDB Classifications table
-- Event source mapping from SQS
+**Resources:**
+- API Gateway (`GET /?url=<image_url>&name=<filename>`)
+- ImageGetAndSaveLambda (30s timeout, downloads and stores images)
+- S3 image bucket (`sagemaker-<region>-<account>`)
+- SNS topic for image upload events
+- SQS upload queue (360s visibility timeout)
+- SQS upload DLQ with CloudWatch alarm
 
-### 3. **IntegrationStack** - Data Forwarding
-- IntegrationLambda for XML conversion
-- SaveXMLLambda for storage
+**Features:**
+- Downloads images from external URLs via HTTP/HTTPS
+- Validates image before upload
+- Triggers event chain via SNS/SQS
+- Error handling with DLQ for failed uploads
+
+### 2. **RekognitionStack** - AI Classification & Storage
+**Purpose:** Amazon Rekognition-powered image classification with DynamoDB persistence
+
+**Resources:**
+- image_recognition Lambda (300s timeout, polls SQS)
+- list_images Lambda (30s timeout, API endpoint)
+- DynamoDB Classifications table (on-demand billing, partition key: `image`)
+- API Gateway for list endpoint
+- Event source mapping from upload queue
+
+**Features:**
+- Calls Rekognition DetectLabels API (max 10 labels, 70% confidence)
+- Stores results in DynamoDB with timestamp
+- Publishes to SNS rekognized topic
+- Handles throttling and invalid image errors
+- Provides list endpoint for query classification results
+
+### 3. **IntegrationStack** - XML Conversion & Downstream Forwarding
+**Purpose:** Convert classification results to XML and forward to downstream systems
+
+**Resources:**
+- send_email Lambda (300s timeout, polls SQS)
+- SaveXMLLambda (30s timeout, API endpoint)
 - SNS rekognized topic
-- SQS rekognized queue with DLQ
+- SQS rekognized queue (1800s visibility timeout)
+- SQS rekognized DLQ with CloudWatch alarm
 - S3 XML output bucket
-- SSM Parameter for endpoint URL
+- SSM Parameter Store for downstream endpoint URL
 
-### 4. **VisualizationStack** - Analytics
-- Athena DynamoDB connector (SAR)
+**Features:**
+- Converts Rekognition results to XML format
+- HTTP POST to downstream endpoint (URL from SSM)
+- Validates XML structure before storage
+- Stores XML payloads in S3 with timestamped keys
+- Full error handling and retry logic
+
+### 4. **VisualizationStack** - Analytics & Dashboards
+**Purpose:** Federated queries on DynamoDB data with QuickSight visualization
+
+**Resources:**
+- Athena DynamoDB connector (SAR Lambda)
 - Glue crawler for schema discovery
-- Athena workgroup
-- QuickSight data source integration
+- Glue database and data catalog
+- Athena workgroup (dynamodb-visualization)
+- QuickSight data source
+- IAM roles with required permissions
+
+**Features:**
+- Federated SQL queries on DynamoDB from Athena
+- Automatic schema discovery via Glue crawler
+- Pre-configured QuickSight integration
+- Cost-optimized with S3 result/spill buckets
+- Full audit logging via CloudWatch
 
 ## 🔒 Security & IAM
 
@@ -261,6 +363,9 @@ Built using AWS CDK best practices:
 ## Deployment Commands
 
 ```bash
+# Bash Deployment (Linux/Mac)
+cd solution-files/python
+
 # Deploy all stacks
 ./deploy.sh --region us-east-1
 
@@ -275,6 +380,21 @@ Built using AWS CDK best practices:
 
 # Cleanup orphaned resources
 ./deploy.sh --cleanup --region us-east-1
+```
+
+```powershell
+# PowerShell Deployment (Windows)
+cd solution-files\python
+
+# Deploy all stacks (simple mode)
+.\deploy-simple.ps1
+
+# Deploy with specific region
+$env:AWS_REGION = "us-east-1"
+.\deploy-simple.ps1
+
+# View deployment progress
+.\deploy-simple.ps1 -Verbose
 ```
 
 ## 🐛 Troubleshooting
@@ -308,18 +428,23 @@ Contributions welcome! Areas for improvement:
 
 ## 📄 License
 
-This project can be used by the curious - all the curious and people who want to build something amazing
+This project can be used by the curious - all the curious and people who want to build something amazing.
 
-## 👤 Author
+**Free to use for:** Learning, experimentation, and building amazing things
 
-**Ajit Jadhav**
 
-## 🙏 Acknowledgments
+## � Author & Credits
+
+**Project Lead:** Ajit Jadhav  
+**Repository:** [github.com/VinayShinde-Cloud/AWS_Rekognition](https://github.com/VinayShinde-Cloud/AWS_Rekognition)
+
+## �🙏 Acknowledgments
 
 - Built with AWS CDK
 - Uses Amazon Rekognition for AI-powered image classification
 - Inspired by serverless architecture best practices
 - Developed using Kiro AI IDE
+- Special thanks to Ajit Jadhav for the original architecture design
 
 ---
 
